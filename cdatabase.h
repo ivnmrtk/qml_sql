@@ -5,7 +5,7 @@
 #include <qsqldatabase.h>
 #include <QSqlQuery>
 #include <QVariant>
-#include <Qdebug>
+#include <QDebug>
 #include <QSqlError>
 
 class CDataBase : public QObject
@@ -51,26 +51,26 @@ public:
     int recId();
     //Свойство для отображения поля recFIO текущей записи.
     //  Свойство только на чтение
-    Q_PROPERTY(QString recFIO READ recFIO NOTIFY recFIOChanged)
+    Q_PROPERTY(QString recTitle READ recTitle NOTIFY recTitleChanged)
     //Метод-чтения
-    QString recFIO();
+    QString recTitle();
     //Свойство для отображения поля recTel текущей записи.
     //  Свойство только на чтение
-    Q_PROPERTY(QString recTel READ recTel NOTIFY recTelChanged)
+    Q_PROPERTY(QString recAuthor READ recAuthor NOTIFY recAuthorChanged)
     //Метод-чтения
-    QString recTel();
+    QString recAuthor();
     //Свойство для отображения поля recAdr текущей записи.
     //  Свойство только на чтение
-    Q_PROPERTY(QString recAdr READ recAdr NOTIFY recAdrChanged)
+    Q_PROPERTY(QString recPublisher READ recPublisher NOTIFY recPublisherChanged)
     //Метод-чтения
-    QString recAdr();
+    QString recPublisher();
     //Метод для добавления новой записи в БД, в качестве параметров
     //  передаются значения полей: id, fio, tel и adr после добавления
     //  текущей становится добавленная запись
-    Q_INVOKABLE void add(int Id, QString FIO, QString Tel, QString Adr);
+    Q_INVOKABLE void add(int Id, QString recTitle, QString recAuthor, QString recPublisher);
     //Метод для изменения значения текущей записи, в качестве параметров
     //  передаются значения полей: fio, tel и adr,
-    Q_INVOKABLE void set(QString FIO, QString Tel, QString Adr);
+    Q_INVOKABLE void set(QString recTitle, QString recAuthor, QString recPublisher);
     //Метод для удаления текущей записи. После удаления текущей
     //  становится следующая запись, если удалялась последняя запись,
     //  тогда текущей становится предыдущая запись
@@ -88,11 +88,11 @@ public:
     //Сигнал, возникающий при изменении значения свойства recId
     void recIdChanged(int Id);
     //Сигнал, возникающий при изменении значения свойства recFIO
-    void recFIOChanged(QString FIO);
+    void recTitleChanged(QString title);
     //Сигнал, возникающий при изменении значения свойства recTel
-    void recTelChanged(QString Tel);
+    void recAuthorChanged(QString author);
     //Сигнал, возникающий при изменении значения свойства recAdr
-    void recAdrChanged(QString Adr);
+    void recPublisherChanged(QString publisher);
   public slots:
   };
 

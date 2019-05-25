@@ -18,7 +18,7 @@ CDataBase::~CDataBase() {
 //Метод для подсчета записей в БД
 int CDataBase::Count() {
   //Формируем запрос на подсчет количества записей в БД
-  QSqlQuery q("SELECT count(*) FROM phones");
+  QSqlQuery q("SELECT count(*) FROM books");
   //Выполняем запрос
   q.exec();
   q.first();
@@ -40,7 +40,7 @@ int CDataBase::Calc(QSqlQuery &Query) {
 //  возвращает true, если нет, тогда false
 bool CDataBase::CheckID(int Id) {
   //Формируем запрос на выборку записей с идентификатором Id
-  QSqlQuery q("SELECT * FROM phones WHERE id=?");
+  QSqlQuery q("SELECT * FROM books WHERE id=?");
   //Подставляем значение идентификатора в запрос
   q.bindValue(0, Id);
   //Выполняем запрос
@@ -69,34 +69,34 @@ void CDataBase::Refresh(int Pos) {
     //  благодаря этому QML интерфейс информируется о факте
     //  изменения значения свойства
     emit recIdChanged(fSelQuery->value("id").toInt());
-    emit recFIOChanged(fSelQuery->value("fio").toString());
-    emit recTelChanged(fSelQuery->value("tel").toString());
-    emit recAdrChanged(fSelQuery->value("adr").toString());
+    emit recTitleChanged(fSelQuery->value("title").toString());
+    emit recAuthorChanged(fSelQuery->value("author").toString());
+    emit recPublisherChanged(fSelQuery->value("publisher").toString());
   } else {
     //Если значение параметра Pos равно -1, тогда в БД нет
     //  записей, вызываем сигналы для свойств со значениями,
     //  которые обозначают отсутствие данных
     emit recIdChanged(-1);
-    emit recFIOChanged("");
-    emit recTelChanged("");
-    emit recAdrChanged("");
+    emit recTitleChanged("");
+    emit recAuthorChanged("");
+    emit recPublisherChanged("");
   }
 }
 //Метод для добавления новой записи в БД, в качестве параметров
 //  передаются значения полей: id, fio, tel и adr, после добавления
 //  текущей становится добавленная запись
-void CDataBase::add(int Id, QString FIO, QString Tel, QString Adr) {
+void CDataBase::add(int Id, QString title, QString author, QString publisher) {
   //Проверяем идентификатор добавляемой записи на уникальность
   if (CheckID(Id) != true)
     //Если такой уже есть, тогда просто выходим из метода
     return;
   //Формируем запрос на вставку новой записи
-  QSqlQuery q("INSERT INTO phones (id, fio, tel, adr) VALUES (?, ?, ?, ?)");
+  QSqlQuery q("INSERT INTO books (id, title, author, publisher) VALUES (?, ?, ?, ?)");
   //Подставляем значения параметров в запрос
   q.bindValue(0, Id);
-  q.bindValue(1, FIO);
-  q.bindValue(2, Tel);
-  q.bindValue(3, Adr);
+  q.bindValue(1, title);
+  q.bindValue(2, author);
+  q.bindValue(3, publisher);
   //Выполняем запрос
   q.exec();
   //Переходим к последней записи
@@ -108,15 +108,15 @@ void CDataBase::add(int Id, QString FIO, QString Tel, QString Adr) {
 }
 //Метод для изменения значения текущей записи, в качестве параметров
 //  передаются значения полей: fio, tel и adr,
-void CDataBase::set(QString FIO, QString Tel, QString Adr) {
+void CDataBase::set(QString title, QString author, QString publisher) {
   //Определяем идентификатор текущей записи БД
   int id = fSelQuery->value("id").toInt();
   //Формируем запрос на обновление содержимого текущей записи
-  QSqlQuery q("UPDATE phones SET fio=?, tel=?, adr=? WHERE id=?");
+  QSqlQuery q("UPDATE books SET title=?, author=?, publisher=? WHERE id=?");
   //Подставляем значения параметров в запрос
-  q.bindValue(0, FIO);
-  q.bindValue(1, Tel);
-  q.bindValue(2, Adr);
+  q.bindValue(0, title);
+  q.bindValue(1, author);
+  q.bindValue(2, publisher);
   q.bindValue(3, id);
   //Выполняем запрос
   q.exec();
@@ -128,7 +128,7 @@ void CDataBase::set(QString FIO, QString Tel, QString Adr) {
 //  становится предыдущая запись
 void CDataBase::del() {
   //Формируем запрос на удаление текущей записи
-  QSqlQuery q("DELETE FROM phones WHERE id=?");
+  QSqlQuery q("DELETE FROM books WHERE id=?");
   //Определяем идентификатор текущей записи
   int id = fSelQuery->value("id").toInt();
   //Подставляем значение идентификатора в запрос
@@ -200,7 +200,7 @@ void CDataBase::setDataBaseName(QString dataBaseName) {
     //Если БД открылась, тогда метод open() возвращает true
     //Создаем в динамической области памяти запрос на выборку
     //  данных из БД
-    fSelQuery = new  QSqlQuery("SELECT * FROM phones");
+    fSelQuery = new  QSqlQuery("SELECT * FROM books");
     //Определяем количество записей в БД, если количество равно 0,
     if (Count() == 0)
       // тогда устанавливаем значение -1 в поле fPos,
@@ -228,31 +228,31 @@ int CDataBase::recId() {
     return -1;
 }
 //Метод-чтения, возвращающий значение свойства recFIO
-QString CDataBase::recFIO() {
+QString CDataBase::recTitle() {
   //Если количество записей в БД больше 0
   if (Count() > 0)
     //  тогда возвращаем значение поля fio текущей записи
-    return fSelQuery->value("fio").toString();
+    return fSelQuery->value("title").toString();
   else
     // иначе "", что говорит о том, что данные отсутствуют
     return "";
 }
 //Метод-чтения, возвращающий значение свойства recTel
-QString CDataBase::recTel() {
+QString CDataBase::recAuthor() {
   //Если количество записей в БД больше 0
   if (Count() > 0)
     //  тогда возвращаем значение поля tel текущей записи
-    return fSelQuery->value("tel").toString();
+    return fSelQuery->value("author").toString();
   else
     // иначе "", что говорит о том, что данные отсутствуют
     return "";
 }
 //Метод-чтения, возвращающий значение свойства recAdr
-QString CDataBase::recAdr() {
+QString CDataBase::recPublisher() {
   //Если количество записей в БД больше 0
   if (Count() > 0)
     //  тогда возвращаем значение поля adr текущей записи
-    return fSelQuery->value("adr").toString();
+    return fSelQuery->value("publisher").toString();
   else
     // иначе "", что говорит о том, что данные отсутствуют
     return "";

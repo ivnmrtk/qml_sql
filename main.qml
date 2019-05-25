@@ -30,7 +30,7 @@ Window {
         //Определяем идентификатор
         id: dataBase
         //Задаем имя БД
-        dataBaseName: "C:/SQLight/mybd.db"
+        dataBaseName: "C:/Users/Ivan/Documents/QtProjects/qml_sql/books.db"
       }
       //Объявляем табличный компоновщик
       GridLayout {
@@ -66,7 +66,7 @@ Window {
         //  информации из текущей записи БД
         Text {
           Layout.row: 2; Layout.column: 1
-          text: "ФИО:"
+          text: "Название:"
         }
         Rectangle {
           Layout.row: 2; Layout.column: 2
@@ -74,12 +74,12 @@ Window {
           color: "grey"
           Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: dataBase.recFIO
+            text: dataBase.recTitle
           }
         }
         Text {
           Layout.row: 3; Layout.column: 1
-          text: "Телефон:"
+          text: "Автор:"
         }
         Rectangle {
           Layout.row: 3; Layout.column: 2
@@ -87,12 +87,12 @@ Window {
           color: "grey"
           Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: dataBase.recTel
+            text: dataBase.recAuthor
           }
         }
         Text {
           Layout.row: 4; Layout.column: 1
-          text: "Адрес:"
+          text: "Издательство:"
         }
         Rectangle {
           Layout.row: 4; Layout.column: 2
@@ -100,7 +100,7 @@ Window {
           color: "grey"
           Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: dataBase.recAdr
+            text: dataBase.recPublisher
           }
         }
         //Описываем кнопку "<" для перемещения к предыдущей записи
@@ -151,8 +151,8 @@ Window {
               //Вызываем диалоговое окно, в котором будет редактироваться
               //  текущая запись, в метод edit передаем данные текущей
               //  записи, полученные через элемент dtatBase
-              dlgAddEdit.edit(dataBase.recId, dataBase.recFIO,
-                dataBase.recTel, dataBase.recAdr)
+              dlgAddEdit.edit(dataBase.recId, dataBase.recTitle,
+                dataBase.recAuthor, dataBase.recPublisher)
             }
           }
           //Описываем кнопку "Удалить" для удаления текущей записи
@@ -179,16 +179,16 @@ Window {
           //Добавляем новую запись вызовом метода add() элемента dataBase,
           //  в метод передаем данные из соответствующих свойств
           //  диалогового окна dlgAddEdit
-          dataBase.add(dlgAddEdit.recId, dlgAddEdit.recFIO,
-            dlgAddEdit.recTel, dlgAddEdit.recAdr)
+          dataBase.add(dlgAddEdit.recId, dlgAddEdit.recTitle,
+            dlgAddEdit.recAuthor, dlgAddEdit.recPublisher)
           //Если свойство имеет значение 2
         if (stateDlg === 2)
           //  значит окно закрылось нажатием на кнопку "Ok" и было в
           //  режиме редактирования
           //Редактируем текущую запись вызовом метода set()
           //  элемента dataBase
-          dataBase.set(dlgAddEdit.recFIO, dlgAddEdit.recTel,
-            dlgAddEdit.recAdr)
+          dataBase.set(dlgAddEdit.recTitle, dlgAddEdit.recAuthor,
+            dlgAddEdit.recPublisher)
       }
       //Описываем диалоговое окно Добавления/Редактирования записи. Окно
       //  может открываться в одном из двух режимов: Добавления - в этом
@@ -202,9 +202,9 @@ Window {
         width: 200
         //Описываем свойства, через которые передаем информацию из окна
         property int recId: -1
-        property string recFIO: ""
-        property string recTel: ""
-        property string recAdr: ""
+        property string recTitle: ""
+        property string recAuthor: ""
+        property string recPublisher: ""
         //Описываем свойство, хранящее состояние окна
         property int stateDlg: 0
         //Описываем вспомогательное свойство
@@ -218,9 +218,9 @@ Window {
           tfId.enabled = true
           //Очищаем поля ввода
           tfId.text = ""
-          tfFIO.text = ""
-          tfTel.text = ""
-          tfAdr.text = ""
+          tfTitle.text = ""
+          tfAuthor.text = ""
+          tfPublisher.text = ""
           //Открываем диалоговое окно
           this.open()
           //Задаем состояние окна - открытое
@@ -230,16 +230,16 @@ Window {
         }
         //Описываем функцию edit(), которая открывает окно в режиме
         //  редактирования, в функцию передаются данные текущей записи
-        function edit(num, fio, tel, adr) {
+        function edit(num, bookTitle, author, publisher) {
           //Меняем заголовок окна
           title = "Редактирование"
           //Блокируем поле ввода tfId, т.к. идентификатор изменять нельзя
           tfId.enabled = false
           //Остальным полям ввода присваиваем данные текущей записи
           tfId.text = num
-          tfFIO.text = fio
-          tfTel.text = tel
-          tfAdr.text = adr
+          tfTitle.text = bookTitle
+          tfAuthor.text = author
+          tfPublisher.text = publisher
           //Открываем диалоговое окно
           this.open()
           //Задаем состояние окна - открытое
@@ -273,30 +273,30 @@ Window {
           //  ввода информации
           Text {
             Layout.row: 2; Layout.column: 1
-            text: "ФИО:"
+            text: "Название:"
           }
           TextField {
-            id: tfFIO
+            id: tfTitle
             Layout.row: 2; Layout.column: 2
-            placeholderText: "Введите ФИО"
+            placeholderText: "Введите название"
           }
           Text {
             Layout.row: 3; Layout.column: 1
-            text: "Телефон:"
+            text: "Автор:"
           }
           TextField {
-            id: tfTel
+            id: tfAuthor
             Layout.row: 3; Layout.column: 2
-            placeholderText: "Введите телефон"
+            placeholderText: "Введите автора"
           }
           Text {
             Layout.row: 4; Layout.column: 1
-            text: "Адрес:"
+            text: "Издательство:"
           }
           TextField {
-            id: tfAdr
+            id: tfPublisher
             Layout.row: 4; Layout.column: 2
-            placeholderText: "Введите адрес"
+            placeholderText: "Введите издательство"
           }
         }
         //Описываем обработчик сигнала accepted(), возникающего
@@ -305,9 +305,9 @@ Window {
           //Передаем значения полей ввода в соответствующие свойства
           //  диалогового окна
           recId = Number(tfId.text)
-          recFIO = tfFIO.text
-          recTel = tfTel.text
-          recAdr = tfAdr.text
+          recTitle = tfTitle.text
+          recAuthor = tfAuthor.text
+          recPublisher = tfPublisher.text
           //Передаем в свойство stateDlg состояние окна:
           //  1 – добавление или 2 - редактирование
           stateDlg = st

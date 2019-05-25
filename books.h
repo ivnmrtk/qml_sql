@@ -10,12 +10,12 @@ private:
     int recId;
     QString recTitle;
     QString recAuthor;
-    QString recYear;
+    QString recPublisher;
     QString dataBaseName;
 public:
     books();
-    void add(int _id, QString _recTitle, QString _recAuthor, QString _recYear);
-    void set(QString _recTitle, QString _recAuthor, QString _recYear);
+    void add(int _id, QString _recTitle, QString _recAuthor, QString _recPublisher);
+    void set(QString _recTitle, QString _recAuthor, QString _recPublisher);
     void del();
     void prev();
     void next();
